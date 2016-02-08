@@ -1,0 +1,29 @@
+Stages of Zirca
+
+Stage 1 - A simple loop that spits out "ok." to every response.
+
+Stage 2 - Add a name section, so a ?: when name is unknown and then ask for name and input this as the name.
+
+Stage 3 - Make some way to quit the chat by saying quit.
+
+Stage 4 - some responses have interesting replies.
+
+Stage 5 - These keywords can be anywhere in a response.
+
+Stage 6 - There is more randomness in the responses.
+
+Stage 7 - Use sentiment to determine the mood of statements. If mood is becoming negative say something like you are getting angry aren't you
+
+Stage 8 - Create history of words
+
+Stage 9 - use history for understanding the topic
+
+Stage 10 - use topic for words like it.
+
+Stage 11 - create profile of replier.
+
+Stage 12 - instead of boring replies to unknowns, use profile to start a new topic that the chatbot can use.
+
+Stage 13 - Use negatives on topics and agree with replier.
+
+Stage 14 - Use name to find gender using that function, and use this to start female or male conversations.
