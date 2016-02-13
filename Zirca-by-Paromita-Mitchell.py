@@ -20,66 +20,52 @@ Memory will be easy to implement later.
 import re
 import time
 
-chatting = True #for the while loop
+chatting = True  # for the while loop
 
 print("What is your name? (please say quit to end chat")
-name = input("?: ") #inital name
+name = input("?: ")  # initial name
 print("Hi,", name)
-topic = "NOT HERE" # default value for topic. For debugging.
+topic = "NOT HERE"  # default value for topic. For debugging.
 
-pairs={
-r"hello": "hello!", #r"pattern" this is using re module.
-r"(.*?goodbye.*)":"bye! Wait, why are you saying TOPIC",
-r"no": "oh. ok. sorry.",
-r".*?I am (.*)?[,]|.*?I am (.*)?[?]|.*?I am (.*)?[.]|.*?I am (.*)": "Oh? Really? It must be fun to be TOPIC",
+pairs=[#highest priority at the BOTTOM: it'll print the last one.
+    (r"quit", "It's a shame to see you go. I hope you come back soon!"),
+    (r"(.*?goodbye.*)","bye! Wait, why are you saying TOPIC"),
+    (r".*?no.*|.*?nah.*|.*?not really.*", "oh. ok. sorry."),
+    (r".*?I am (.*)?[,]|.*?I am (.*)?[?]|.*?I am (.*)?[.]|.*?I am (.*)", "Oh? Really? It must be fun to be TOPIC"),
 # this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog. 
-#Also, when you just sat "I am a frog" without a full stop it will work
-r".*?\?":"I'm not supposed to answer that.",
-r"quit":"It's a shame to see you go. I hope you come back soon!",
-r".*?why.*": "because, oh nevermind. Let's talk about you."
-}#problem with priorities or statements.
+# Also, when you just sat "I am a frog" without a full stop it will work
+    (r".*?\?", "I'm not supposed to answer that."),
+    (r".*?hello.*|.*?hi.*|.*?yo.*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*", "hello!"),  # r"pattern" this is using re module.
+    (r".*?why.*", "because, oh nevermind. Let's talk about you."),
+    (r".*?how are you.*", "Well, I guess I'm alright. It really depends on you. How are you?")
+]  # problem with priorities or statements.
 
-notpair = "ok." #the final answer if the response is in my library
+notpair = "ok."  # the final answer if the response is in my library
 
-def replyold(response): #main loop function
-    reply = notpair #default
-    for key in pairs: #goes through all keys in the pairs dictionary to find one that is preferred
-        match = re.match(key,response,re.I) #re.I removes case sensitivity
+def reply(response):  # main loop function
+    reply = notpair  # default
+    for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
+        match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
         if match != None:
-            if "TOPIC" in pairs[key]:#match.group spits out part of pattern that fits the stuff in brackets.
-                for n in range(1,5):
-                    if match.group(n)!=None:
+            print(pair)
+            if "TOPIC" in pair[1]:  # match.group spits out part of pattern that fits the stuff in brackets.
+                for n in range(1, 5):
+                    if match.group(n) != None:
                         topic = match.group(n)
                 # need to find a better way than this. More fluid. THis is a basic way. A work around.
-                reply = pairs[key].replace("TOPIC", str(topic))
+                reply = pair[1].replace("TOPIC", str(topic))
             else:
-                reply = pairs[key]
-    
-    print(reply)
-
-def reply(response): #main loop function
-    reply = notpair #default
-    for key in pairs: #goes through all keys in the pairs dictionary to find one that is preferred
-        match = re.match(key,response,re.I) #re.I removes case sensitivity
-        if match != None:
-            if "TOPIC" in pairs[key]:#match.group spits out part of pattern that fits the stuff in brackets.
-                for n in range(1,5):
-                    if match.group(n)!=None:
-                        topic = match.group(n)
-                # need to find a better way than this. More fluid. THis is a basic way. A work around.
-                reply = pairs[key].replace("TOPIC", str(topic))
-            else:
-                reply = pairs[key]
+                reply = pair[1]
 
     print(reply)
 
-#loop for chat
+# loop for chat
 while chatting == True:
     response = input(name+": ")
-    time.sleep(1) #more natural to have wait time. Seems more human.
+    time.sleep(1)  # more natural to have wait time. Seems more human.
     reply(response)
-    #no i need another method. I'll do it like mitsuku for now to keep it simple.
-    #ending the chat
+    # no i need another method. I'll do it like mitsuku for now to keep it simple.
+    # ending the chat
     if response == "quit":
         chatting = False
     
