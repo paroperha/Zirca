@@ -22,25 +22,44 @@ import time
 
 chatting = True  # for the while loop
 
-print("What is your name? (please say quit to end chat")
+print("What is your name? (please say quit to end chat)")
 name = input("?: ")  # initial name
 print("Hi,", name)
 topic = "NOT HERE"  # default value for topic. For debugging.
 
 pairs=[#highest priority at the BOTTOM: it'll print the last one.
     (r"quit", "It's a shame to see you go. I hope you come back soon!"),
-    (r"(.*?goodbye.*)","bye! Wait, why are you saying TOPIC"),
+    (r"(.*?goodbye.*)", "bye! Wait, why are you saying [TOPIC]"),
+    (r".*?[?]", "I'm not supposed to answer that."),
     (r".*?no.*|.*?nah.*|.*?not really.*", "oh. ok. sorry."),
-    (r".*?I am (.*)?[,]|.*?I am (.*)?[?]|.*?I am (.*)?[.]|.*?I am (.*)", "Oh? Really? It must be fun to be TOPIC"),
+    (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", "Oh? Really? It must be fun to be [TOPIC]"),
 # this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog. 
 # Also, when you just sat "I am a frog" without a full stop it will work
-    (r".*?\?", "I'm not supposed to answer that."),
-    (r".*?hello.*|.*?hi.*|.*?yo.*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*", "hello!"),  # r"pattern" this is using re module.
+    (r".*?hello.*|.*?hi.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*", "hello!"),  # r"pattern" this is using re module.
     (r".*?why.*", "because, oh nevermind. Let's talk about you."),
-    (r".*?how are you.*", "Well, I guess I'm alright. It really depends on you. How are you?")
+    (r".*?how are you.*", "Well, I guess I'm alright. It really depends on you. How are you?"),
+    (r".*?what.*?your name[?]|.*?do you have a name[?]", "My name is Zirca."),
+    (r".*?how are you[?]", "I am fine."),
+    (r"Nice to meet you.*?", "Nice to meet you too."),
+    (r"today", "I actually did a lot today! I talked to a bunch of people, got a bit of maths done..."),
+    (r"What's your opinion on (.*)?[?]", "Well, I'll have to think about that.[PAUSE]I think that [ZTHINK]."),
+    (r".*?homework.*", "I hate homework. It's such a stress on the brain.")
 ]  # problem with priorities or statements.
 
 notpair = "ok."  # the final answer if the response is in my library
+
+
+def editOutput(response, output, match):
+    reply = output
+    if "[TOPIC]" in output:  # match.group spits out part of pattern that fits the stuff in brackets.
+        for n in range(1, 5):
+            if match.group(n) != None:
+                topic = match.group(n)
+        # need to find a better way than this. More fluid. THis is a basic way. A work around.
+        reply = output.replace("[TOPIC]", str(topic))
+
+
+    return reply
 
 def reply(response):  # main loop function
     reply = notpair  # default
@@ -48,14 +67,7 @@ def reply(response):  # main loop function
         match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
         if match != None:
             print(pair)
-            if "TOPIC" in pair[1]:  # match.group spits out part of pattern that fits the stuff in brackets.
-                for n in range(1, 5):
-                    if match.group(n) != None:
-                        topic = match.group(n)
-                # need to find a better way than this. More fluid. THis is a basic way. A work around.
-                reply = pair[1].replace("TOPIC", str(topic))
-            else:
-                reply = pair[1]
+            reply = editOutput(response, pair[1], match) 
 
     print(reply)
 
@@ -70,7 +82,7 @@ while chatting == True:
         chatting = False
     
 
-'''
+"""
 Issues to deal with:
 
  - if two keywords in a line, it picks the last one.
@@ -80,7 +92,7 @@ Issues to deal with:
  - more questions, the response no.
  - much later issue is to fix a theme in what is being said.
  -triggers only one key word. Need to fix that. Need some kind of priority.
-'''
+"""
 
 
 
@@ -88,7 +100,7 @@ Issues to deal with:
 
 
 
-'''
+"""
 #library of terms
 closureTerms = []
 greetingTerms = []
@@ -115,5 +127,5 @@ if noTerms in introduction:
             historya.close()
     
     
-'''
+"""
 
