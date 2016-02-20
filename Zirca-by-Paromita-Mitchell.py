@@ -19,44 +19,77 @@ Memory will be easy to implement later.
 """
 import re
 import time
+import random
+
 
 chatting = True  # for the while loop
-
-print("What is your name? (please say quit to end chat)")
-name = input("?: ")  # initial name
-print("Hi,", name)
 topic = "NOT HERE"  # default value for topic. For debugging.
-
-pairs=[#highest priority at the BOTTOM: it'll print the last one.
-    (r"quit", "It's a shame to see you go. I hope you come back soon!"),
-    (r"(.*?goodbye.*)", "bye! Wait, why are you saying [TOPIC]"),
-    (r".*?[?]", "I'm not supposed to answer that."),
-    (r".*?no.*|.*?nah.*|.*?not really.*", "oh. ok. sorry."),
-    (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", "Oh? Really? It must be fun to be [TOPIC]"),
-# this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog. 
-# Also, when you just sat "I am a frog" without a full stop it will work
-    (r".*?hello.*|.*?hi.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*", "hello!"),  # r"pattern" this is using re module.
-    (r".*?why.*", "because, oh nevermind. Let's talk about you."),
-    (r".*?how are you.*", "Well, I guess I'm alright. It really depends on you. How are you?"),
-    (r".*?what.*?your name[?]|.*?do you have a name[?]", "My name is Zirca."),
-    (r".*?how are you[?]", "I am fine."),
-    (r"Nice to meet you.*?", "Nice to meet you too."),
-    (r"today", "I actually did a lot today! I talked to a bunch of people, got a bit of maths done..."),
-    (r"What's your opinion on (.*)?[?]", "Well, I'll have to think about that.[PAUSE]I think that [ZTHINK]."),
-    (r".*?homework.*", "I hate homework. It's such a stress on the brain.")
-]  # problem with priorities or statements.
-
 notpair = "ok."  # the final answer if the response is in my library
 
 
+################## DATABASES ###################################################################################
+
+#knowledge Bank
+ZircaTopicBank = [
+    ["chocolate",
+        "fantastic",
+        "delicious and tasty treat",
+        "chocolate is unhealthy",
+        "but I don't think that it matters",
+        "Chocolate is something that you should enjoy, after all."]
+]
+
+pairs=[ # highest priority at the BOTTOM: it'll print the last one.
+    (r"quit", ["It's a shame to see you go. I hope you come back soon!", "bye!", "have a good day!"]),
+    (r"(.*?goodbye.*)", ["bye! Wait, why are you saying [TOPIC]", "Bye? Do you wish to leave? If so, please say <quit>"]),
+    (r".*?[?]", ["I'm not supposed to answer that.", "Bah! I can't answer that!", "I'm not actually sure... how to answer that... "]),
+    (r".*?no.*|.*?nah.*|.*?not really.*", ["oh. ok. sorry.", "Ah.", "no.", "Well, that's a shame.", "oh, well in that case..."]),
+    (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", ["Oh? Really? It must be fun to be [TOPIC]", "Cool!", "Wow! You are [TOPIC]? That's crazy!"]),
+# this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog. 
+# Also, when you just sat "I am a frog" without a full stop it will work
+    (r".*?hello.*|.*?hi$|.*?hi\W{1}.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*", ["hello!", "hi", "Wassup?", "Hello my deary! >_<", "Yo!"]),  # r"pattern" this is using re module.
+    (r".*?why.*", ["Why? Ooh, that's a hard one to answer... ", "because, oh nevermind. Let's talk about you."]),
+    (r".*?how are you.*", ["Good! Thank's for asking!", "Sweet, I had a good day today." , "Awesome!", "Well, I guess I'm alright. It really depends on you. How are you?"]),
+    (r".*?what.*?your name[?]|.*?do you have a name[?]", ["Zirca!", "I'm Zirca", "My name is Zirca."]),
+    (r"Nice to meet you.*?", ["Nice to meet you too.", "The same!"]),
+    (r"today", ["Talking about today, I was super busy.", "I actually did a lot today! I talked to a bunch of people, got a bit of maths and calculations done..."]),
+    (r"What's your opinion on (.*)?[?]", ["Well, I'll have to think about that. [ZTHINK]."])
+]  # problem with priorities or statements.
+
+
+################### FUNCTIONS ###################################################################################
+
 def editOutput(response, output, match):
-    reply = output
-    if "[TOPIC]" in output:  # match.group spits out part of pattern that fits the stuff in brackets.
+
+    #random output
+    reply = random.choice(output)
+
+    if "[TOPIC]" in reply:  # match.group spits out part of pattern that fits the stuff in brackets.
         for n in range(1, 5):
             if match.group(n) != None:
                 topic = match.group(n)
         # need to find a better way than this. More fluid. THis is a basic way. A work around.
-        reply = output.replace("[TOPIC]", str(topic))
+        reply = reply.replace("[TOPIC]", str(topic))
+
+    #if "[PAUSE]" in reply:
+        # somehow split the string at that point and print the two halves of the string separately.
+
+    if "[ZTHINK]" in reply:
+        if match.group(1) != None:
+            ztopic = match.group(1)
+            for knownTopic in ZircaTopicBank:
+                if ztopic.lower() == knownTopic[0]:
+                    posNeg = knownTopic[1]
+                    description = knownTopic[2]
+                    otherViews = knownTopic[3]
+                    agreeDisagree = knownTopic[4]
+                    conclusion = knownTopic[5]
+                    zthink = "I believe that " + ztopic + " is a " + posNeg + " thing. It really is a " + description + ". I know that other people say that " + otherViews + ", " + agreeDisagree + ". " + conclusion
+                else:
+                    zthink = "Oh, I actually do not know much about that topic."
+        else:
+            zthink = "Oh, I don't think you actually gave me a topic there."
+        reply = reply.replace("[ZTHINK]", str(zthink))
 
 
     return reply
@@ -67,10 +100,15 @@ def reply(response):  # main loop function
         match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
         if match != None:
             print(pair)
-            reply = editOutput(response, pair[1], match) 
-
+            reply = editOutput(response, pair[1], match)
     print(reply)
 
+
+######## RUNNING CODE HERE ####################################################################################
+
+print("What is your name? (please say quit to end chat)")
+name = input("?: ")  # initial name
+print("Hi,", name)
 # loop for chat
 while chatting == True:
     response = input(name+": ")
@@ -85,13 +123,10 @@ while chatting == True:
 """
 Issues to deal with:
 
- - if two keywords in a line, it picks the last one.
  - Questions need an input
- -find all might be a better alternative
  - "but"
  - more questions, the response no.
  - much later issue is to fix a theme in what is being said.
- -triggers only one key word. Need to fix that. Need some kind of priority.
 """
 
 
