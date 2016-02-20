@@ -21,11 +21,12 @@ import re
 import time
 import random
 
+nonresponsefile = open("nonresponsefile.txt", "a") #file which remembers phrases that Zirca didn't understand.
 
 chatting = True  # for the while loop
 topic = "NOT HERE"  # default value for topic. For debugging.
 notpair = "ok."  # the final answer if the response is in my library
-name = input("?: ")  # initial name
+
 
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
 
@@ -46,16 +47,14 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
         ["It's a shame to see you go. I hope you come back soon!",
          "bye!", "have a good day!"]),
 
-    (r"(.*?goodbye.*)",
-        ["bye! Wait, why are you saying <TOPIC>",
-         "Bye? Do you wish to leave? If so, please say <quit>"]),
+
 
     (r".*?[?]",
-        ["I'm not supposed to answer that.",
-         "Bah! I can't answer that!",
+        [# "I'm not supposed to answer that.",
+         # "Bah! I can't answer that!",
          "I'm not actually sure... how to answer that... "]),
 
-    (r".*?no.*|.*?nah.*|.*?not really.*",
+    (r".*?\W{1}no\W{1}.*|.*?nah.*|.*?not really.*",
         ["oh. ok. sorry.",
          "Ah.", "no.",
          "Well, that's a shame.",
@@ -67,7 +66,9 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
         ["Oh? Really? It must be fun to be <TOPIC>",
          "Cool!",
          "Wow! You are <TOPIC>? That's crazy!"]),
-
+    (r"(.*?goodbye.*)",
+        ["bye! Wait, why are you saying <TOPIC>",
+        "Bye? Do you wish to leave? If so, please say <quit>"]),
 
     (r".*?hello.*|.*?hi$|.*?hi\W{1}.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*",
         ["hello!",
@@ -86,7 +87,7 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
          "Awesome!",
          "Well, I guess I'm alright. It really depends on you. How are you?"]),
 
-    (r".*?what.*?your name[?]|.*?do you have a name[?]",
+    (r".*?what.*?your name[?]?.*|.*?do you have a name[?]",
         ["Zirca!",
          "I'm Zirca",
          "My name is Zirca."]),
@@ -95,22 +96,26 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
         ["Nice to meet you too.",
          "The same!"]),
 
-    (r".*?\W?today.*",
+    (r".*?\W{1}today.*",
         ["Talking about today, I was super busy.",
          "I actually did a lot today! I talked to a bunch of people, got a bit of maths and calculations done..."]),
 
-    (r".*?\W?sorry.*",
-        ["Oh don't worry, there's no reason to be sorry.", "That's quite alright."]),
+    (r".*?\W{1}sorry.*",
+        ["Oh don't worry, there's no reason to be sorry.",
+         "That's quite alright."]),
 
     (r"What's your opinion on (.*)?[?]",
-        ["Well, I'll have to think about that.<PAUSE><ZTHINK>."])
+        ["Well, I'll have to think about that.<PAUSE><ZTHINK>."]),
+
+    (r".*?haribo\W{1}.*?",
+        ["~HARIBO~"])
 ]
 
 # ---------------- FUNCTIONS ----------------------------------------------------------------------------------#
 
 def editOutput(response, output, match):
 
-    #random output
+    # random output
     reply = random.choice(output)
 
     if "<TOPIC>" in reply:  # match.group spits out part of pattern that fits the stuff in brackets.
@@ -120,7 +125,7 @@ def editOutput(response, output, match):
         # need to find a better way than this. More fluid. THis is a basic way. A work around.
         reply = reply.replace("<TOPIC>", str(topic))
 
-    #if "[PAUSE]" in reply:
+    # if "[PAUSE]" in reply:
         # somehow split the string at that point and print the two halves of the string separately.
 
     if "<ZTHINK>" in reply:
@@ -150,19 +155,26 @@ def reply(response):  # main loop function
         if match != None:
             print(pair)
             reply = editOutput(response, pair[1], match)
+    if reply == notpair:
+        nonresponsefile.write(str(response) + "\n")
+    if reply == "I'm not actually sure... how to answer that... ":
+        nonresponsefile.write(str(response)+ "\n")
     pause(reply)
 
 def pause(reply):
+
     pausePhrases = re.split(r"<PAUSE>", reply)
 
     for pausePhrase in pausePhrases:
-        print(pausePhrase)
         time.sleep(1)
+        print(pausePhrase)
+
 
 
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
 
 print("What is your name? (please say quit to end chat)")
+name = input("?: ")  # initial name
 print("Hi,", name)
 # loop for chat
 while chatting == True:
@@ -174,18 +186,11 @@ while chatting == True:
     # ending the chat
     if response == "quit":
         chatting = False
-    
 
-
-
-
-
-
-
+nonresponsefile.close()
 
 """
 Issues to deal with:
-
  - Questions need an input
  - "but"
  - more questions, the response no.
@@ -193,32 +198,32 @@ Issues to deal with:
 """
 
 
-"""
-#library of terms
-closureTerms = []
-greetingTerms = []
-noTerms = []
-yesTerms = []
-historyr=open('history.txt', "r")
-historya=open('history.txt', "a")
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvv me realising what a pain in the butt this is going to be vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-#inital information about person
-print("Hiya! Hang on, do I know you? ")
-introduction = input("?:")
-if noTerms in introduction:
-    print("Ah! Then you are new? Fantastic! Well, I guess I better introduce myself then! I'm Zirca and-- well I guess I should let you speak. What's your name?")
-    nameinput = input("?:")
-    if noTerms in nameinput:
-        print("Well, I kind of do need your name, but if you don't want me to know your name that's also fine - you can call yourself anonymous.")
-        print("So I'll ask again - What is your name?")
-        nameinput = input("?:")
-        if nameinput == "anonymous":
-            name = "?"
-        else:
-            name = nameinput
-            historya.write(name)
-            historya.close()
-    
-    
-"""
+# #library of terms
+# closureTerms = []
+# greetingTerms = []
+# noTerms = []
+# yesTerms = []
+# historyr=open('history.txt', "r")
+# historya=open('history.txt', "a")
+#
+# #inital information about person
+# print("Hiya! Hang on, do I know you? ")
+# introduction = input("?:")
+# if noTerms in introduction:
+#     print("Ah! Then you are new? Fantastic! Well, I guess I better introduce myself then! I'm Zirca and-- well I guess I should let you speak. What's your name?")
+#     nameinput = input("?:")
+#     if noTerms in nameinput:
+#         print("Well, I kind of do need your name, but if you don't want me to know your name that's also fine - you can call yourself anonymous.")
+#         print("So I'll ask again - What is your name?")
+#         nameinput = input("?:")
+#         if nameinput == "anonymous":
+#             name = "?"
+#         else:
+#             name = nameinput
+#             historya.write(name)
+#             historya.close()
+#
+
 
