@@ -22,12 +22,14 @@ import time
 import random
 
 nonresponsefile = open("nonresponsefile.txt", "a") #file which remembers phrases that Zirca didn't understand.
+good = open("good.txt", "a")
+bad = open("bad.txt", "a")
 
 chatting = True  # for the while loop
 topic = "NOT HERE"  # default value for topic. For debugging.
 notpair = "ok."  # the final answer if the response is in my library
 
-
+chathistory = ""
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
 
 # knowledge Bank
@@ -107,14 +109,77 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
     (r"What's your opinion on (.*)?[?]",
         ["Well, I'll have to think about that.<PAUSE><ZTHINK>."]),
 
-    (r".*?haribo\W{1}.*?",
+    (r".*?haribos?.*?",
         ["~HARIBO~"])
 ]
 
+# subpairs -> subpair/subtopic -> keyword, initial statement, questionsdict -> question block -> question, response check,
+# (cont.)reply
+# its really complicated... :'(
+subpairs = [
+    ["HARIBO", "Oh? You mentioned Haribos!",
+        {"They are delicious aren't they?":
+            [[r"yes.*", r"no.*"],
+            ["Yes! That's fantastic!", "Aw, that's a shame.", "Well, then."]],
+        "When did you last eat them?":
+            [[r".*?\W{1}year.*?|.*?\W{1}ages.*?|(?m)^(?=.*long)((?!not).)*$", r".*?not long.*|.*?recent.*|.*?day.*|.*?week.*"],
+            ["Ah, so quite a while ago, then. That's unfortunate. You should treat yourself!","Not too long ago, then! That's good!", "Ah, hmm."]]
+         }
+     ]
+
+
+
+]
+
+
 # ---------------- FUNCTIONS ----------------------------------------------------------------------------------#
 
-def editOutput(response, output, match):
 
+def reply():  # main loop function
+    reply = notpair  # default
+    for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
+        match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
+        if match != None:
+            subblock = re.match(r"~(.*)?~", pair[1][0])
+            if subblock:
+                keyword = subblock.group(1)
+                block(keyword)
+                return
+            else:
+                reply = editoutput(pair[1], match)
+    pause(reply)
+    lognonresponses(reply)
+
+
+def block(keyword):
+    subchatting = True
+    global chathistory
+
+    for subpair in subpairs:
+        if subpair[0] == keyword:
+            subtopic = subpair
+    print(subtopic[1])
+
+    chathistory = chathistory + str(subtopic[1]) + "\n"
+
+    qdict = subtopic[2]
+    for question in qdict:
+        print(question)
+        chathistory = chathistory + str(question) + "\n"
+        subresponse = input(userName + ": ")
+        subreply = qdict[question][1][-1]
+        for patternnumber in range(len(qdict[question][0])):
+            replymatch = re.match(qdict[question][0][patternnumber], subresponse)
+            if replymatch:
+                subreply = qdict[question][1][patternnumber]
+        print(subreply)
+        chathistory = chathistory + str(subreply) + "\n"
+        if subresponse == "I'm bored.":
+            return
+
+
+
+def editoutput(output, match):
     # random output
     reply = random.choice(output)
 
@@ -148,43 +213,59 @@ def editOutput(response, output, match):
 
     return reply
 
-def reply(response):  # main loop function
-    reply = notpair  # default
-    for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
-        match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
-        if match != None:
-            print(pair)
-            reply = editOutput(response, pair[1], match)
-    if reply == notpair:
-        nonresponsefile.write(str(response) + "\n")
-    if reply == "I'm not actually sure... how to answer that... ":
-        nonresponsefile.write(str(response)+ "\n")
-    pause(reply)
 
 def pause(reply):
+    global chathistory
 
     pausePhrases = re.split(r"<PAUSE>", reply)
 
     for pausePhrase in pausePhrases:
         time.sleep(1)
         print(pausePhrase)
+        chathistory = chathistory + str(pausePhrase) + "\n"
 
 
+def lognonresponses(reply):
+    if reply == notpair:
+        nonresponsefile.write(str(response) + "\n")
+    if reply == "I'm not actually sure... how to answer that... ":
+        nonresponsefile.write(str(response) + "\n")
 
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
 
 print("What is your name? (please say quit to end chat)")
-name = input("?: ")  # initial name
-print("Hi,", name)
+chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
+userName = input("?: ")  # initial name
+print("Hi, " + userName)
+chathistory = chathistory + str("Hi, " + userName) + "\n"
+
 # loop for chat
 while chatting == True:
-    response = input(name+": ")
-    time.sleep(1)
+    response = input(userName+": ")
     # more natural to have wait time. Seems more human.
-    reply(response)
+    reply()
 
     # ending the chat
     if response == "quit":
+        print("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!")
+        chathistory = chathistory + str("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!") + "\n"
+
+        ratingAccepted = False
+        while not ratingAccepted:
+            try:
+                rating = int(input("rating: "))
+                ratingAccepted = True
+            except ValueError:
+                print("Please type in a integer - using your number keys. '10' instead of 'ten'.")
+                chathistory = chathistory + str("Please type in a integer - using your number keys. '10' instead of 'ten'.") + "\n"
+        print("thank you!")
+        chathistory = chathistory + str("thank you!") + "\n\n\n"
+        if rating > 5:
+            good.write(chathistory)
+            good.close()
+        else:
+            bad.write(chathistory)
+            bad.close()
         chatting = False
 
 nonresponsefile.close()
