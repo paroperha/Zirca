@@ -11,3 +11,62 @@ Not too long ago, then! That's good!
 ok.
 bye!
 WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+What is your name? (please say quit to end chat)
+Hi, quit
+have a good day!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: steffi
+Hi, steffi
+steffi: How was your day?
+I'm not actually sure... how to answer that...
+steffi: What do you mean?
+I'm not actually sure... how to answer that...
+steffi: How are you?
+Awesome!
+steffi: My room is very big.
+ok.
+steffi: I have a barbie castle
+ok.
+steffi: I have a kitchen with lots of toys
+ok.
+steffi: I am a girl
+Wow! You are a girl? That's crazy!
+steffi: What is your name?
+My name is Zirca.
+steffi: That is a good name.
+ok.
+steffi: Do you like chocolate
+ok.
+steffi: Do you like haribos?
+Oh? You mentioned Haribos!
+When did you last eat them?
+steffi: now
+Ah, hmm.
+They are delicious aren't they?
+steffi: yes
+Yes! That's fantastic!
+steffi: quit
+bye!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating: 4
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+Hi, paro
+paro: I am a frog.
+Wow! You are a frog? That's crazy!
+paro: I am a frog
+ok.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :0
+thank you!
+
+

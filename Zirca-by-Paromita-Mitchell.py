@@ -8,14 +8,10 @@ Zirca
 
 chat should be infinite until they want to leave
 be kind and humble in this one, got to be humble with chatbots, else people freak out
-should know more about one topic than others - colours and light
 
 Hello! Currently my code is quite basic. I have not built up a large database,
 and instead I am concentrating on creating a good base. 
 With a good base I can add more to the dictionary later.
-Memory will be easy to implement later.
-
-
 """
 import re
 import time
@@ -31,6 +27,20 @@ notpair = "ok."  # the final answer if the response is in my library
 
 chathistory = ""
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
+
+# profile
+userProfile = {
+    #name
+    #age
+    #likes
+    #dislikes
+    #owns
+    #is a
+    #topics
+        #perspective on topic
+    #does
+    #feels
+}
 
 # knowledge Bank
 ZircaTopicBank = [
@@ -52,7 +62,7 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
 
 
     (r".*?[?]",
-        [# "I'm not supposed to answer that.",
+        [  # "I'm not supposed to answer that.",
          # "Bah! I can't answer that!",
          "I'm not actually sure... how to answer that... "]),
 
@@ -65,17 +75,17 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
     # this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog.
     # Also, when you just sat "I am a frog" without a full stop it will work
     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)",
-        ["Oh? Really? It must be fun to be <TOPIC>",
-         "Cool!",
-         "Wow! You are <TOPIC>? That's crazy!"]),
+        ["Oh? Really? It must be fun to be <TOPIC>%ISA%",
+         "Cool!%ISA%",
+         "Wow! You are <TOPIC>? That's crazy!%ISA%"]),
     (r"(.*?goodbye.*)",
-        ["bye! Wait, why are you saying <TOPIC>",
-        "Bye? Do you wish to leave? If so, please say <quit>"]),
+        ["bye! Wait, why are you saying <TOPIC>%ISA%",
+        "Bye? Do you wish to leave? If so, please say <quit>%ISA%"]),
 
     (r".*?hello.*|.*?hi$|.*?hi\W{1}.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*",
         ["hello!",
          "hi",
-         "Wassup?",
+         "Wassup.",
          "Hello my deary! >_<",
          "Yo!"]),
 
@@ -140,12 +150,16 @@ def reply():  # main loop function
     for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
         match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
         if match != None:
-            subblock = re.match(r"~(.*)?~", pair[1][0])
+            rawoutput = pair[1][0]
+            subblock = re.match(r"~(.*)?~", rawoutput)
             if subblock:
                 keyword = subblock.group(1)
                 block(keyword)
                 return
             else:
+                appendUsers = re.match(r".*?%(.*)?%.*", rawoutput)
+                if appendUsers:
+                    appendProfile(appendUsers, match, rawoutput)
                 reply = editoutput(pair[1], match)
     pause(reply)
     lognonresponses(reply)
@@ -167,6 +181,7 @@ def block(keyword):
         print(question)
         chathistory = chathistory + str(question) + "\n"
         subresponse = input(userName + ": ")
+        chathistory = chathistory + str(userName + ": " + subresponse) + "\n"
         subreply = qdict[question][1][-1]
         for patternnumber in range(len(qdict[question][0])):
             replymatch = re.match(qdict[question][0][patternnumber], subresponse)
@@ -213,6 +228,20 @@ def editoutput(output, match):
 
     return reply
 
+def appendProfile(key, match, rawoutput):
+    groupno = 1
+    noError = True
+    while noError:
+            try:
+                value = match.group(groupno)
+                if value != None:
+                    noError = False
+                groupno += 1
+            except IndexError:
+                noError = False
+    userProfile[key] = value
+    print(key)
+    return rawoutput.replace("%"+key+"%", "")
 
 def pause(reply):
     global chathistory
@@ -220,7 +249,7 @@ def pause(reply):
     pausePhrases = re.split(r"<PAUSE>", reply)
 
     for pausePhrase in pausePhrases:
-        time.sleep(1)
+        #time.sleep(1)
         print(pausePhrase)
         chathistory = chathistory + str(pausePhrase) + "\n"
 
@@ -236,13 +265,15 @@ def lognonresponses(reply):
 print("What is your name? (please say quit to end chat)")
 chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
 userName = input("?: ")  # initial name
+chathistory = chathistory + str("?: "+userName) + "\n"
+userProfile["name"] = userName
 print("Hi, " + userName)
 chathistory = chathistory + str("Hi, " + userName) + "\n"
 
 # loop for chat
 while chatting == True:
     response = input(userName+": ")
-    # more natural to have wait time. Seems more human.
+    chathistory = chathistory + str(userName+": "+response) + "\n"
     reply()
 
     # ending the chat
@@ -254,6 +285,7 @@ while chatting == True:
         while not ratingAccepted:
             try:
                 rating = int(input("rating: "))
+                chathistory = chathistory + str("rating :"+str(rating)) + "\n"
                 ratingAccepted = True
             except ValueError:
                 print("Please type in a integer - using your number keys. '10' instead of 'ten'.")
