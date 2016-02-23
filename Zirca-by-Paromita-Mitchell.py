@@ -25,6 +25,7 @@ chatting = True  # for the while loop
 topic = "NOT HERE"  # default value for topic. For debugging.
 notpair = "ok."  # the final answer if the response is in my library
 
+
 chathistory = ""
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
 
@@ -141,12 +142,20 @@ subpairs = [
 
 ]
 
+questionlist = ( # NOTE IS A TUPLE!!!!!!!
+    ("How are you?",
+     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", r".*?(fine).*", r".*?(not too \w*)?\W.*", r"^(\w*)?[.,!].*", r"^(very \w*)?\W.*", r"^\w*?$")),
+
+)
 
 # ---------------- FUNCTIONS ----------------------------------------------------------------------------------#
 
 
 def reply():  # main loop function
+    global chathistory
     reply = notpair  # default
+    if questionset != ():
+        questionreply = checkAnswer()
     for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
         match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
         if match != None:
@@ -159,14 +168,40 @@ def reply():  # main loop function
             else:
                 appendUsers = re.match(r".*?%(.*)?%.*", rawoutput)
                 if appendUsers:
-                    appendProfile(appendUsers, match, rawoutput)
+                    appendProfile(appendUsers.group(1), findgroup(match))
                 reply = editoutput(pair[1], match)
+    # if questionset != ():
+        # print(questionreply)
+        # chathistory += str(questionreply) +"\n"
     pause(reply)
     lognonresponses(reply)
 
+def checkAnswer():
+    question = questionset[0]  # TIS A TUPLE VALUE so is not linked and that is fine.
+    answerchecks = questionset[1]  # "
+
+    answermatch = None
+
+    for answercheck in answerchecks:
+        answermatch = re.match(answercheck, response)
+        if answermatch:
+            answer = findgroup(answermatch)
+            break
+
+    global questionlist
+    questionlist = list(questionlist)
+    questionlist.remove(questionset)
+    questionlist = tuple(questionlist)
+
+    if answermatch:
+        appendProfile(question, answer)
+        return answer
+    else:
+        return ""
+
+
 
 def block(keyword):
-    subchatting = True
     global chathistory
 
     for subpair in subpairs:
@@ -198,15 +233,17 @@ def editoutput(output, match):
     # random output
     reply = random.choice(output)
 
+    appendUsers = re.match(r".*?(%.*?%)", reply)
+    if appendUsers:
+        type = appendUsers.group(1)
+        reply = reply.replace(str(type), "")
+
     if "<TOPIC>" in reply:  # match.group spits out part of pattern that fits the stuff in brackets.
         for n in range(1, 5):
             if match.group(n) != None:
                 topic = match.group(n)
         # need to find a better way than this. More fluid. THis is a basic way. A work around.
         reply = reply.replace("<TOPIC>", str(topic))
-
-    # if "[PAUSE]" in reply:
-        # somehow split the string at that point and print the two halves of the string separately.
 
     if "<ZTHINK>" in reply:
         if match.group(1) != None:
@@ -220,28 +257,29 @@ def editoutput(output, match):
                     conclusion = knownTopic[5]
                     zthink = "I believe that " + ztopic + " is a " + posNeg + " thing. It really is a " + description + ". I know that other people say that " + otherViews + ", " + agreeDisagree + ". " + conclusion
                 else:
-                    zthink = "Oh, I actually do not know much about that topic."
+                    zthink = "Oh, I actually do not know much about that topic"
         else:
-            zthink = "Oh, I don't think you actually gave me a topic there."
+            zthink = "Oh, I don't think you actually gave me a topic there"
         reply = reply.replace("<ZTHINK>", str(zthink))
 
 
     return reply
 
-def appendProfile(key, match, rawoutput):
+def findgroup(match):
     groupno = 1
     noError = True
     while noError:
-            try:
-                value = match.group(groupno)
-                if value != None:
-                    noError = False
-                groupno += 1
-            except IndexError:
+        try:
+            value = match.group(groupno)
+            if value != None:
                 noError = False
-    userProfile[key] = value
-    print(key)
-    return rawoutput.replace("%"+key+"%", "")
+            groupno += 1
+        except IndexError:
+            noError = False
+    return value
+
+def appendProfile(key, match):
+    userProfile[key] = match
 
 def pause(reply):
     global chathistory
@@ -260,6 +298,18 @@ def lognonresponses(reply):
     if reply == "I'm not actually sure... how to answer that... ":
         nonresponsefile.write(str(response) + "\n")
 
+def askaquestion():
+    # questionlist is a TUPLE MATRIX for immutability
+    global questionset
+    global chathistory
+    try:
+        questionset = random.choice(questionlist) # choice is fine with tuples. question set is s separate variable now
+        print(questionset[0]) # prints out question
+        chathistory += str(questionset[0]) + "\n"
+    except IndexError:
+        questionset = ()
+
+
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
 
 print("What is your name? (please say quit to end chat)")
@@ -268,6 +318,7 @@ userName = input("?: ")  # initial name
 chathistory = chathistory + str("?: "+userName) + "\n"
 userProfile["name"] = userName
 print("Hi, " + userName)
+askaquestion()
 chathistory = chathistory + str("Hi, " + userName) + "\n"
 
 # loop for chat
@@ -275,6 +326,7 @@ while chatting == True:
     response = input(userName+": ")
     chathistory = chathistory + str(userName+": "+response) + "\n"
     reply()
+    askaquestion()
 
     # ending the chat
     if response == "quit":
@@ -298,17 +350,18 @@ while chatting == True:
         else:
             bad.write(chathistory)
             bad.close()
+        print(userProfile)
         chatting = False
 
 nonresponsefile.close()
 
-"""
-Issues to deal with:
- - Questions need an input
- - "but"
- - more questions, the response no.
- - much later issue is to fix a theme in what is being said.
-"""
+
+# Issues to deal with:
+#  TODO Questions should only be asked once
+#  TODO - "but"
+#  TODO - more questions, the response no.
+#  TODO - much later issue is to fix a theme in what is being said.
+
 
 
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvv me realising what a pain in the butt this is going to be vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv

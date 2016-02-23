@@ -70,3 +70,66 @@ rating :0
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: paro
+Hi, paro
+paro: hello
+Wassup.
+paro: hello
+hi
+paro: hello
+hello!
+paro: What's your opinion on chocolate
+ok.
+paro: What's your opinion on chocolate?
+Well, I'll have to think about that.
+I believe that chocolate is a fantastic thing. It really is a delicious and tasty treat. I know that other people say that chocolate is unhealthy, but I don't think that it matters. Chocolate is something that you should enjoy, after all.
+paro: lala did da lololol Haribos
+Oh? You mentioned Haribos!
+They are delicious aren't they?
+paro: yes
+Yes! That's fantastic!
+When did you last eat them?
+paro: yesterday
+Not too long ago, then! That's good!
+paro: Yes I know!
+ok.
+paro: I am a frog
+Wow! You are a frog? That's crazy!
+paro: quit
+bye!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :2
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: Faris.
+Hi, Faris.
+Faris.: I am the coolest person you've ever spoken to.
+Oh? Really? It must be fun to be the coolest person you've ever spoken to
+Faris.: It actually is.
+ok.
+Faris.: So, what is up?
+I'm not actually sure... how to answer that... 
+Faris.: Why not?
+because, oh nevermind. Let's talk about you.
+Faris.: Okay! What about me?
+I'm not actually sure... how to answer that... 
+Faris.: You're pretty indecisive aren't you?
+I'm not actually sure... how to answer that... 
+Faris.: Why not?
+because, oh nevermind. Let's talk about you.
+Faris.: No. Let out your pent up feelings.
+ok.
+Faris.: Do it!
+ok.
+Faris.: Now!
+ok.
+Faris.: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :5
+thank you!
+
+
