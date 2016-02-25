@@ -80,8 +80,8 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
          "Cool!%ISA%",
          "Wow! You are <TOPIC>? That's crazy!%ISA%"]),
     (r"(.*?goodbye.*)",
-        ["bye! Wait, why are you saying <TOPIC>%ISA%",
-        "Bye? Do you wish to leave? If so, please say <quit>%ISA%"]),
+        ["bye! Wait, why are you saying <TOPIC>",
+        "Bye? Do you wish to leave? If so, please say <quit>"]),
 
     (r".*?hello.*|.*?hi$|.*?hi\W{1}.*|.*?yo .*|.*?good morning.*|.*?g'day.*|.*?good afternoon.*",
         ["hello!",
@@ -199,6 +199,8 @@ def checkAnswer():
     else:
         return ""
 
+def checkRepeatStatement():
+
 
 
 def block(keyword):
@@ -312,7 +314,6 @@ def askaquestion():
 
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
 
-print("What is your name? (please say quit to end chat)")
 chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
 userName = input("?: ")  # initial name
 chathistory = chathistory + str("?: "+userName) + "\n"
@@ -325,7 +326,8 @@ chathistory = chathistory + str("Hi, " + userName) + "\n"
 while chatting == True:
     response = input(userName+": ")
     chathistory = chathistory + str(userName+": "+response) + "\n"
-    reply()
+    reply()print("What is your name? (please say quit to end chat) (Plz be gentle)")
+
     askaquestion()
 
     # ending the chat

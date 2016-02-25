@@ -133,3 +133,49 @@ rating :5
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: shiuli
+How are you?
+Hi, shiuli
+shiuli: good, thanks and you?
+I'm not actually sure... how to answer that... 
+shiuli: what are you upto?
+I'm not actually sure... how to answer that... 
+shiuli: I am good, thanks
+Wow! You are good? That's crazy!
+shiuli: what?
+I'm not actually sure... how to answer that... 
+shiuli: what's your name?
+I'm Zirca
+shiuli: where are you from?
+I'm not actually sure... how to answer that... 
+shiuli: it's a nice name.
+ok.
+shiuli: What's your opinion on chocolate?
+Well, I'll have to think about that.
+I believe that chocolate is a fantastic thing. It really is a delicious and tasty treat. I know that other people say that chocolate is unhealthy, but I don't think that it matters. Chocolate is something that you should enjoy, after all.
+shiuli: haribos
+Oh? You mentioned Haribos!
+When did you last eat them?
+shiuli: I've never ate them before.
+Ah, hmm.
+They are delicious aren't they?
+shiuli: i don't know
+Well, then.
+shiuli: what time do you go to bed?
+I'm not actually sure... how to answer that... 
+shiuli: What did you do today
+Talking about today, I was super busy.
+shiuli: in doing what today
+I actually did a lot today! I talked to a bunch of people, got a bit of maths and calculations done...
+shiuli: do you go to a school or a college?
+I'm not actually sure... how to answer that... 
+shiuli: do you know is now it's day or night?
+I'm not actually sure... how to answer that... 
+shiuli: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :5
+thank you!
+
+
