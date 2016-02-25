@@ -178,4 +178,51 @@ WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best
 rating :5
 thank you!
 
+What is your name? (please say quit to end chat)
+?: paro
+What's your favourite colour?
+Hi, paro
+paro: I don't have one.
+ok.
+How are you?
+paro: good,thanks.
+ok.
+paro: quit
+have a good day!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :1
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+How are you?
+Hi, paro
+paro: good, thanks
+ok.
+What's your favourite colour?
+paro: I don't have one. 
+ok.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :1
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+What's your favourite colour?
+Hi, paro
+paro: blue
+ok.
+How are you?
+paro: good
+ok.
+paro: quit
+bye!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :1
+thank you!
+
 

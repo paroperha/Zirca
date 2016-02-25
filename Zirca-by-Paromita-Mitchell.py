@@ -25,6 +25,7 @@ chatting = True  # for the while loop
 topic = "NOT HERE"  # default value for topic. For debugging.
 notpair = "ok."  # the final answer if the response is in my library
 
+allResponses = []
 
 chathistory = ""
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
@@ -41,6 +42,7 @@ userProfile = {
         #perspective on topic
     #does
     #feels
+    #questions
 }
 
 # knowledge Bank
@@ -58,13 +60,27 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
 
     (r"quit",  # r"pattern" this is using re module.
         ["It's a shame to see you go. I hope you come back soon!",
-         "bye!", "have a good day!"]),
+         "bye!",
+         "have a good day!"]),
 
+    (r".*?(ha)\1*|.*?(he)\1*|.*?l(ol)\1*|.*?that[' is]{0,2}s funny.*",
+         ["Oh, yes that is hilarious!",
+          "Very funny indeed!",
+          "hehe",
+          ":P"]),
 
+    (r"great",
+     ["Yup!",
+      "Uh uh! It is great!",
+      "You're not being sarcastic are you? Because I actually think I am great... :)"]),
+
+    (r".*?!!!+.*",
+         ["Oops, did I say something wrong?",
+          "That's a lot of exclamation marks..."]),
 
     (r".*?[?]",
-        [  # "I'm not supposed to answer that.",
-         # "Bah! I can't answer that!",
+        ["I'm not supposed to answer that.",
+         "Bah! I can't answer that!",
          "I'm not actually sure... how to answer that... "]),
 
     (r".*?\W{1}no\W{1}.*|.*?nah.*|.*?not really.*",
@@ -72,6 +88,10 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
          "Ah.", "no.",
          "Well, that's a shame.",
          "oh, well in that case..."]),
+
+    (r".*?what [(?:can)(?:should)(?:do)] I [(?:ask)(?:say)].*",
+        ["Well, I'll be honest. I don't know every question, so things will be a bit hard to understand. <pause> I am a bit like a baby who skipped the whole learn words session and jumped into answering questions. <pause> Also, I'll admit it, I don't have very good parents - she doesn't spend enough time with me. She should be with me all the time! ",
+         ""]),
 
     # this set of patterns is very special. If you say I am a frog. And I like stuff it will only pick up I am a frog.
     # Also, when you just sat "I am a frog" without a full stop it will work
@@ -105,11 +125,16 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
          "I'm Zirca",
          "My name is Zirca."]),
 
+    (r".*?what[ 'si]{0,2}s up.*",
+    ["Nothing much, really, I am not that busy today. That's why I have time to chat with you!",
+     "The sky, of course. OH do you mean what's special? I would probably recite to you the news of the day, but honestly, I'm not Siri or Cortana and I'm pretty sure you know how to google. :)",
+     "Googling news.... <pause> Well, apparently the new CEO of apple won't work with the FBI... and... OOH some smart cookie posted an article called 'Seeking Asylum is a Human Right' - a very good read."]),
+
     (r"Nice to meet you.*?",
         ["Nice to meet you too.",
          "The same!"]),
 
-    (r".*?\W{1}today.*",
+    (r".*?\W{1}today.*|.*?your day.*",
         ["Talking about today, I was super busy.",
          "I actually did a lot today! I talked to a bunch of people, got a bit of maths and calculations done..."]),
 
@@ -144,7 +169,9 @@ subpairs = [
 
 questionlist = ( # NOTE IS A TUPLE!!!!!!!
     ("How are you?",
-     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", r".*?(fine).*", r".*?(not too \w*)?\W.*", r"^(\w*)?[.,!].*", r"^(very \w*)?\W.*", r"^\w*?$")),
+     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", r".*?(fine).*", r".*?(not too \w+)?\W.*", r"([a-z]+)[.].*", r"^(very \w+)?\W.*", r"^(\w+?)$")),
+    ("What's your favourite colour?",
+     (r"my favou?rite colou?r is (.+){1}[.,!?]?|(.+?)[.,?!]|(\w+){1}$", r".*?(don'?t have).*"))
 
 )
 
@@ -200,7 +227,9 @@ def checkAnswer():
         return ""
 
 def checkRepeatStatement():
-
+    for pastresponse in allResponses:
+        if response == pastresponse:
+            print("Hang on, didn't you say that before????? Well, whatever.")
 
 
 def block(keyword):
@@ -297,7 +326,7 @@ def pause(reply):
 def lognonresponses(reply):
     if reply == notpair:
         nonresponsefile.write(str(response) + "\n")
-    if reply == "I'm not actually sure... how to answer that... ":
+    if reply in ["I'm not supposed to answer that.", "Bah! I can't answer that!", "I'm not actually sure... how to answer that... "]:
         nonresponsefile.write(str(response) + "\n")
 
 def askaquestion():
@@ -305,7 +334,7 @@ def askaquestion():
     global questionset
     global chathistory
     try:
-        questionset = random.choice(questionlist) # choice is fine with tuples. question set is s separate variable now
+        questionset = random.choice(questionlist)  # choice is fine with tuples. question set is s separate variable now
         print(questionset[0]) # prints out question
         chathistory += str(questionset[0]) + "\n"
     except IndexError:
@@ -314,6 +343,7 @@ def askaquestion():
 
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
 
+print("What is your name? (please say quit to end chat)")
 chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
 userName = input("?: ")  # initial name
 chathistory = chathistory + str("?: "+userName) + "\n"
@@ -325,33 +355,37 @@ chathistory = chathistory + str("Hi, " + userName) + "\n"
 # loop for chat
 while chatting == True:
     response = input(userName+": ")
-    chathistory = chathistory + str(userName+": "+response) + "\n"
-    reply()print("What is your name? (please say quit to end chat) (Plz be gentle)")
 
+    chathistory = chathistory + str(userName+": "+response) + "\n"
+    checkRepeatStatement()
+    allResponses.append(response)
+    reply()
     askaquestion()
 
     # ending the chat
     if response == "quit":
-        print("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!")
-        chathistory = chathistory + str("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!") + "\n"
+        if userProfile["name"] != "test":
+            print("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!")
+            chathistory = chathistory + str("WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!") + "\n"
 
-        ratingAccepted = False
-        while not ratingAccepted:
-            try:
-                rating = int(input("rating: "))
-                chathistory = chathistory + str("rating :"+str(rating)) + "\n"
-                ratingAccepted = True
-            except ValueError:
-                print("Please type in a integer - using your number keys. '10' instead of 'ten'.")
-                chathistory = chathistory + str("Please type in a integer - using your number keys. '10' instead of 'ten'.") + "\n"
-        print("thank you!")
-        chathistory = chathistory + str("thank you!") + "\n\n\n"
-        if rating > 5:
-            good.write(chathistory)
-            good.close()
-        else:
-            bad.write(chathistory)
-            bad.close()
+            ratingAccepted = False
+            while not ratingAccepted:
+                try:
+                    rating = int(input("rating: "))
+                    chathistory = chathistory + str("rating :"+str(rating)) + "\n"
+                    ratingAccepted = True
+                except ValueError:
+                    print("Please type in a integer - using your number keys. '10' instead of 'ten'.")
+                    chathistory = chathistory + str("Please type in a integer - using your number keys. '10' instead of 'ten'.") + "\n"
+            print("thank you!")
+            chathistory = chathistory + str("thank you!") + "\n\n\n"
+
+            if rating > 5:
+                good.write(chathistory)
+                good.close()
+            else:
+                bad.write(chathistory)
+                bad.close()
         print(userProfile)
         chatting = False
 
