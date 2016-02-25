@@ -1,0 +1,138 @@
+
+
+What is your name? (please say quit to end chat)
+?: paro
+How are you?
+Hi, paro
+paro: good, thanks
+ok.
+paro: how are you?
+Sweet, I had a good day today.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :8
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+How are you?
+Hi, paro
+paro: good, thanks
+ok.
+paro: how are you?
+Sweet, I had a good day today.
+paro: That's nice.
+ok.
+paro: quit
+have a good day!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :6
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+What do you like?
+Hi, paro
+paro: chocolate
+ok.
+How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)
+paro: 15
+ok.
+What don't you like?
+paro: I don't like onions. They make me cry. :'(
+ok.
+How are you?
+paro: good, I guess. Your asking a lot of questions. 
+ok.
+What's your favourite colour?
+paro: green, of course.
+ok.
+What do you do?
+paro: I'm a student.
+Oh? Really? It must be fun to be a student
+How do you feel right now? (I wish I could see your face!)
+paro: quite suspiscious of your innumerous questions
+It's a shame to see you go. I hope you come back soon!
+paro: I am not quitting.
+Cool!
+paro: Anyway, how are you? What's your name?
+I'm Zirca
+paro: Oh, great!
+ok.
+paro: I'm Paro. nice to meet you.
+Oh? Really? It must be fun to be Paro. nice to meet you
+paro: I am a frog.
+Oh? Really? It must be fun to be a frog
+paro: I'm  a froggy face.
+Cool!
+paro: I am a frog, nice to meet you.
+Cool!
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :7
+thank you!
+
+
+What is your name? (please say quit to end chat)
+?: paro
+How do you feel right now? (I wish I could see your face!)
+Hi, paro
+paro: pretty good, I'd say
+ok.
+paro: so how are you?
+Awesome!
+paro: That's fantastic!
+It is cool!
+What do you do?
+paro: well, I am a student.
+Oh? Really? It must be fun to be a student
+paro: It is. I learn lots.
+ok.
+How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)
+paro: 15 actually.
+ok.
+paro: I do a lot of homework at school.
+ok.
+How are you?
+paro: I am good. Did a lot today.
+Talking about today, I was super busy.
+paro: yup. I feel for you.
+ok.
+paro: So, how is life?
+I'm not supposed to answer that.
+What don't you like?
+paro: I don't like heavy rain. It hurts the plants.
+ok.
+What do you like?
+paro: Sunny days, programming, dancing(even though I am quite bad)
+Wow! You are quite bad)? That's interesting!
+What's your favourite colour?
+paro: My favourite color is lime green.
+You have a favourite color is lime green. I'll remember that.Oh. I see.
+paro: Ahem. Moving on.
+ok.
+paro: So what do you do?
+Bah! I can't answer that!
+paro: That's ok. Any news?
+Googling news.... <pause> Well, apparently the new CEO of apple won't work with the FBI... and... OOH some smart cookie posted an article called 'Seeking Asylum is a Human Right' - a very good read.
+paro: I know who wrote that. It was my teacher - Dr McIver.
+You have a teacher - Dr McIver. I'll remember that.Oh. I see.
+paro: She is a very good teacher.
+ok.
+paro: do you read many books?
+I'm not supposed to answer that.
+paro: This was a good chat. bye!
+ok.
+paro: quitting now
+ok.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :8
+thank you!
+
+
