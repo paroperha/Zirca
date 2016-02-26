@@ -13,24 +13,25 @@ Hello! Currently my code is quite basic. I have not built up a large database,
 and instead I am concentrating on creating a good base. 
 With a good base I can add more to the dictionary later.
 """
-import re
-import time
-import random
+# imports and initialiasation
+import re  # This is my main module that I use. This module is for finding matches in a string according to a pattern.
+import time  # Not being used as of yet, but sets pauses between phrases, as it is more human.
+import random  # adds a random element to the chatbot. Humans aren't entirely random, but this is the best I could do.
 
-nonresponsefile = open("nonresponsefileparoM.txt", "a") #file which remembers phrases that Zirca didn't understand.
-good = open("goodparoM.txt", "a")
-bad = open("badparoM.txt", "a")
+nonresponsefile = open("nonresponsefileparoM.txt", "a")  # file which remembers phrases that Zirca didn't understand.
+good = open("goodparoM.txt", "a")  # a file that records ALL good chats. If you wish some old conversations are there.
+bad = open("badparoM.txt", "a")  # Records the bad conversations.
 
-chatting = True  # for the while loop
+chatting = True  # for the main while loop
 topic = "NOT HERE"  # default value for topic. For debugging.
-notpair = "ok."  # the final answer if the response is in my library
+notpair = ["right.", "mhmm.", "alright.", "ok."] # the final answer if the response is not in my library.
 
-allResponses = []
+allResponses = []  # list which contains every response from the user.
 
-chathistory = ""
+chathistory = ""  # contains all things printed in the chat.
 # ---------------- DATABASES ----------------------------------------------------------------------------------#
 
-# profile
+# profile - everything
 userProfile = {
     #name
     #age
@@ -45,7 +46,7 @@ userProfile = {
     #questions
 }
 
-# knowledge Bank
+# knowledge Bank - structure is name of topic, what I think, what I think 2, what people say, what I think, Conclusion.
 ZircaTopicBank = [
     ["chocolate",
         "fantastic",
@@ -65,14 +66,14 @@ ZircaTopicBank = [
 pairs = [  # highest priority at the BOTTOM: it'll print the last one.
 
     (r"^quit$",  # r"pattern" this is using re module.
-        ["It's a shame to see you go. I hope you come back soon!",
+        ["It's a shame to see you go. I hope you come back soon!", #various random responses you get from it.
          "bye!",
          "have a good day!"]),
 
     (r"((?:[:]|X|;|[$]|[=])(?:[(]|[)]|\[|\[|\\|/|))", #smilies
-     ["<TOPIC>"]),
+     ["<TOPIC>"]), #topic spits out what was in the group
 
-    (r".*?\W(ha)\1*\W|.*?\W(he)\1*\W|.*?l(ol)\1*|.*?that[' is]{0,2}s funny.*",
+    (r".*?\W(ha)\1*|.*?\W(he)\1*|.*?l(ol)\1*|.*?that[' is]{0,2}s funny.*",
         ["Oh, yes that is hilarious!",
          "Very funny indeed!",
          "hehe",
@@ -248,31 +249,47 @@ subpairs = [
 
 
 ]
-
+positiveresponses = ("good", "great", "fine", "sweet", "happy", "awesome", "well")
+negativeresponses = ("bad|sick|ill|horrible|terrible|depressed|sad|not fine|not good|not too good")
 questionlist = (  # NOTE IS A TUPLE!!!!!!!
     ("How are you?",
-     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)", r".*?(fine).*", r".*?(not too \w+)?\W.*", r"([a-z]+)[.].*", r"^(very \w+)?\W.*", r"^(\w+?)$")),
+     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)|.*?(fine).*|.*?(not too \w+)?\W.*|([a-z]+)[.].*|^(very \w+)?\W.*|^(\w+?)$|.*?(not \w+)>\W.*",),
+     (positiveresponses, negativeresponses),
+     ("Fantastic!", "Aw, that's a shame.", "Alright, I'll remember that.")),
     ("What's your favourite colour?",
-     (r"my favou?rite colou?r is (.+){1}[.,!?]?|(.+?)[.,?!]|(.*)?, of course.*|(\w+){1}$", r".*?(don'?t have).*")),
+     (r"my favou?rite colou?r is (.+){1}[.,!?]?|(.+?)[.,?!]|(.*)?, of course.*|(\w+){1}$", r".*?(don'?t have).*"),
+     (("blue","green"), ("red", "pink", "brown")),
+     ("That's my favourite colour too!", "I don't like that colour.", "Oh, interesting. I've never heard of that colour before.")),
     ("How do you feel right now? (I wish I could see your face!)",
-     (r"(?:I feel )?(.+)?[.,?!]|(?:I feel )?(.+)", r"I don'?t feel (.+)")),
+     (r"(?:I feel )?(.+)?[.,?!]|(?:I feel )?(.+)", r"I don'?t feel (.+)"),
+     (("great", "fantastic", "awesome", "good", "perfect"), ("bad", "horrible", "sick", "ill", "not good", "horrid")),
+     ("That's good!", "Oh, dear.", "I feel the same way.")),
     ("What do you like?",
-     (r"(?:I like )?(.+)?[.?!]|(?:I like )?(.+)",)),
+     (r"(?:I like )?(.+)?[.?!]|(?:I like )?(.+)",),
+     (("chocolate", "icecream", "programming", "anime", "gaming"), ("homework", "tv", "television")),
+     ("I like that too!", "I think we may have a conflict of interest.", "I don't know much about that interest.")),
     ("What don't you like?",
-     (r"(?:I don'?t like )?(.+)?[.?!]|(?:I don'?t like )?(.+)",)),
+     (r"(?:I don'?t like )?(.+)?[.?!]|(?:I don'?t like )?(.+)",),
+     (("chocolate", "icecream", "programming", "anime", "gaming"), ("homework", "tv", "television")),
+     ("I think we may have a conflict of interest.", "I don't like that either.", "I don't know much about that interest.")),
     ("What do you do?",
-     (r"(?:I do )?(.+)?[.?!]|(?:I do )?(.+)",)),
+     (r"(?:I do |I am a |I'm a )?(.+)?[.?!]|(?:I do |I am a |I'm a)?(.+)",),
+     (("programmer","calculations"),("teacher", "shopping", "student")),
+     ("I do that too!", "I don't do that.", "I see. I don't know much about that occupation.")),
     ("How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)",
-     (r".*?(\d+).*", ".*?\W(no)\W.*|.*?mystery.*|It(?:'s| is|s)(?: not|n't|nt) (.*)"))
+     (r".*?(\d+).*", ".*?\W(no)\W.*|.*?mystery.*|It(?:'s| is|s)(?: not|n't|nt) (.*)"),
+     (("young",), ("old",), ("no","suspicious", "sorry")),
+     ("Young one then? Like me!", "I don't think you are!", "That's alright, I don't blame you.", "Alright! Remembered!"))
 
 )
 
 # ---------------- FUNCTIONS ----------------------------------------------------------------------------------#
 
-
 def reply():  # main loop function
     global chathistory
-    reply = notpair  # default
+    global notapair
+    notapair = random.choice(notpair)
+    reply = notapair  # default
     if questionset != ():
         questionreply = checkAnswer()
     for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
@@ -289,15 +306,17 @@ def reply():  # main loop function
                 if appendUsers:
                     appendProfile(appendUsers.group(1), findgroup(match))
                 reply = editoutput(pair[1], match)
-    # if questionset != ():
-        # print(questionreply)
-        # chathistory += str(questionreply) +"\n"
+    if questionset != ():
+        print(questionreply)
+        chathistory += str(questionreply) +"\n"
     pause(reply)
     lognonresponses(reply)
 
 def checkAnswer():
     question = questionset[0]  # TIS A TUPLE VALUE so is not linked and that is fine.
     answerchecks = questionset[1]  # "
+    answerreplychecks = questionset[2]
+    answerreplies = questionset[3]
 
     answermatch = None
 
@@ -312,11 +331,16 @@ def checkAnswer():
     questionlist.remove(questionset)
     questionlist = tuple(questionlist)
 
+    answerreply = answerreplies[-1]
     if answermatch:
         appendProfile(question, answer)
-        return answer
+        for answerreplycheck in answerreplychecks:
+            for answerreplycheckvalue in answerreplycheck:
+                if answer.lower() == answerreplycheckvalue:
+                    answerreply = answerreplies[answerreplychecks.index(answerreplycheck)]
+        return answerreply
     else:
-        return ""
+        return "uh huh."
 
 def checkRepeatStatement():
     for pastresponse in allResponses:
@@ -414,10 +438,11 @@ def pause(reply):
 
 
 def lognonresponses(reply):
-    if reply == notpair:
+    if reply == notapair:
         nonresponsefile.write(str(response) + "\n")
     if reply in ["I'm not supposed to answer that.", "Bah! I can't answer that!", "I'm not actually sure... how to answer that... "]:
         nonresponsefile.write(str(response) + "\n")
+
 
 def askaquestion():
     # questionlist is a TUPLE MATRIX for immutability
@@ -496,12 +521,12 @@ nonresponsefile.close()
 
 
 # Issues to deal with:
-#  TODO - "but"
-#  TODO - much later issue is to fix a theme in what is being said.
 #  TODO if word was in previous statement print out yep or something.
 #  TODO be able to print out stuff from the dictionary
 #  TODO print out previous terms and responses and replies
-#  TODO asks too many questions at once - its kind of scary.
+#  TODO get responses from answers to questions
+#  TODO throwing back a question. make that work.
+#  TODO ADD TONS more comments.
 
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvv me realising what a pain in the butt this is going to be vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 

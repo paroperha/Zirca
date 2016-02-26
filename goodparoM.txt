@@ -136,3 +136,26 @@ rating :8
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: paro
+Hi, paro
+paro: I like books.
+Books! I love books!
+Do you read books?
+paro: yes
+Great! What books have you read? I am an avid fan of Terry Pratchet.
+Do you prefer ebooks or real books?
+paro: ebooks.
+Well, I guess both are fine. Personally I prefer ebooks.
+What don't you like?
+paro: I don't like icecream.
+I think we may have a conflict of interest.
+ok.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :6
+thank you!
+
+

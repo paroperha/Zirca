@@ -226,3 +226,52 @@ rating :1
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: paro
+Hi, paro
+paro: hello
+Yo!
+What do you do?
+paro: I am a student.
+I don't do that.
+Wow! You are a student? That's interesting!
+paro: It is. How are you?
+Sweet, I had a good day today.
+paro: That's nice.
+You're not being sarcastic are you? Because I actually think I am nice... :)
+paro: Haha.
+right.
+paro: haha
+ok.
+paro: that's funny
+hehe
+How do you feel right now? (I wish I could see your face!)
+paro: I fell fine, thanks.
+I feel the same way.
+alright.
+How are you?
+paro: I am good.
+Fantastic!
+Oh? Really? It must be fun to be good
+paro: It is
+right.
+paro: So, what are you up to today?
+Talking about today, I was super busy.
+How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)
+paro: young.
+
+mhmm.
+paro: what do you do for a living?
+Do you want me to repeat? I said '<PREVIOUSREPLY>'
+What do you like?
+paro: I like chocolate
+I like that too!
+ok.
+paro: quit
+It's a shame to see you go. I hope you come back soon!
+What don't you like?
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :1
+thank you!
+
+
