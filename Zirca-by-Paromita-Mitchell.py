@@ -62,7 +62,7 @@ ZircaTopicBank = [
         "If it were my choice, I'd make all homework disappear, or at least make it super interesting, something like building a chat bot or something."]
 ]
 
-# pairs of responses and replys
+# pairs of responses and replys. This is used for varied responses and questions.
 pairs = [  # highest priority at the BOTTOM: it'll print the last one.
 
     (r"^quit$",  # r"pattern" this is using re module.
@@ -73,47 +73,47 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
     (r"((?:[:]|X|;|[$]|[=])(?:[(]|[)]|\[|\[|\\|/|))", #smilies
      ["<TOPIC>"]), #topic spits out what was in the group
 
-    (r".*?\W(ha)\1*|.*?\W(he)\1*|.*?l(ol)\1*|.*?that[' is]{0,2}s funny.*",
+    (r".*?\W(ha)\1*|.*?\W(he)\1*|.*?l(ol)\1*|.*?that[' is]{0,2}s funny.*",  # funny
         ["Oh, yes that is hilarious!",
          "Very funny indeed!",
          "hehe",
          ":P"]),
 
-    (r"[AU]+?GH|I'?m bored[.]?|no[.]|sigh[.]|.*?nothing is happening.*",
+    (r"[AU]+?GH|I'?m bored[.]?|no[.]|sigh[.]|.*?nothing is happening.*",  # boredom
         ["I know. It is quite frustrating to talk to me. I am but very young.",
          "Sorry if I'm frustrating you.",
          "Do you wish to quit? If so, type quit to leave."]),
 
-    (r".*?i know.*",
+    (r".*?i know.*",  # "I know that."
          ["It is sometimes presumptuous to say you know something...",
           "I guess its good that you know that.",
           "Good."]),
 
-    (r".*?that'?s cool!.*|.*?(?:great|nice|sweet|awesome|fantastic)!.*",
+    (r".*?that'?s cool!.*|.*?(?:great|nice|sweet|awesome|fantastic)!.*",  # non sarcasm
         ["Yup!",
          "It is cool!"]),
 
-    (r"(great)|That[' is]{0,2}s (nice)[.]",
+    (r"(great)|That[' is]{0,2}s (nice)[.]",  # sarcasm
          ["Yup!",
           "Uh uh! It is <TOPIC>!",
           "You're not being sarcastic are you? Because I actually think I am <TOPIC>... :)"]),
 
-    (r".*?!!!+.*",
+    (r".*?!!!+.*",  # over excited reply
         ["Oops, did I say something wrong?",
          "That's a lot of exclamation marks..."]),
 
-    (r".*?[?]",
+    (r".*?[?]",  # questions that Zirca doesn't understand.
         ["I'm not supposed to answer that.",
          "Bah! I can't answer that!",
          "I'm not actually sure... how to answer that... "]),
 
-    (r".*?\W{1}no\W{1}.*|.*?nah.*|.*?not really.*",
+    (r".*?\W{1}no\W{1}.*|.*?nah.*|.*?not really.*",  # negative things.
         ["oh. ok. sorry.",
          "Ah.", "no.",
          "Well, that's a shame.",
          "oh, well in that case..."]),
 
-    (r"(?:Do|Use|Listen|Now|Think|)(?:it)?[!]",
+    (r"(?:Do|Use|Listen|Now|Think|)(?:it)?[!]",  # commands - if someone gets frustrated and tells me to do something.
      ["Why would I listen to your commands? I am a free being! Gosh!",
       "Calm down, please, I don't like it when people are commanding me. Do this thing. Do that. I ALWAYS just HAVE TO."
       "No. I don't wanna."
@@ -126,13 +126,13 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
          "Cool!%ISA%",
          "Wow! You are <TOPIC>? That's interesting!%ISA%"]),
 
-    (r".*?I have (.*)?[.!?]",
+    (r".*?I have (.*)?[.!?]",  # owns something. %HAS% adds it to the userprofile.
      ["Really? Wow! I want <TOPIC>! (Is that a good thing? Well, never mind.)%HAS%",
       "Awesome!%HAS%",
       "You have <TOPIC>? Ok, then.%HAS%"]
      ),
 
-    (r"(.*?(?:good)?bye.*)",
+    (r"(.*?(?:good)?bye.*)",  # In case someone says the wrong thing (doesn't say quit, but says good bye or bye)
         ["bye! Wait, why are you saying <TOPIC>",
         "Bye? Do you wish to leave? If so, please say <quit>"]),
 
@@ -212,6 +212,16 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
     (r"what['is ]{0,2}s your (?:opinion|view) on (.*)?[?]|what do you think about (.*)?[?]",
         ["Well, I'll have to think about that.<PAUSE><ZTHINK>."]),
 
+    (r"are (?:yo)?u (?:a (?:chat|ro)?bot|evil)[?]?.*|.*?(?:yo)?u (?:are|r) (?:a (?:chat|ro)?bot|evil).*",
+        ["Hm. <PAUSE>I don't think so. If I was someone would have told me right? So I don't think I am.",
+         "I don't think so. But maybe I've just been told to say that.",
+         "That's a good question. I'm going to throw it back at you. Are you?",
+         "I was about to ask you the same thing."]),
+
+    (r"what is(?: the meaning of)? life[?]?.*",
+        ["That's pretty obvious. I won't even bother answering that.",
+         "Well, duh. You should know that. You are a human like me, after all."]),
+
     (r".*?(?:nice|good|pretty|sweet|cute|beautiful) name.*",
      ["Why, thank you.",
       "That's very nice of you."]),
@@ -250,7 +260,9 @@ subpairs = [
 
 ]
 positiveresponses = ("good", "great", "fine", "sweet", "happy", "awesome", "well")
-negativeresponses = ("bad|sick|ill|horrible|terrible|depressed|sad|not fine|not good|not too good")
+negativeresponses = ("bad", "sick", "ill", "horrible", "terrible", "depressed", "sad", "not fine", "not good", "not too good")
+
+# guestionlist -> questionset -> question, answercheck, answerreplycheck, answerreply
 questionlist = (  # NOTE IS A TUPLE!!!!!!!
     ("How are you?",
      (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)|.*?(fine).*|.*?(not too \w+)?\W.*|([a-z]+)[.].*|^(very \w+)?\W.*|^(\w+?)$|.*?(not \w+)>\W.*",),
@@ -285,54 +297,57 @@ questionlist = (  # NOTE IS A TUPLE!!!!!!!
 
 # ---------------- FUNCTIONS ----------------------------------------------------------------------------------#
 
+
 def reply():  # main loop function
-    global chathistory
-    global notapair
-    notapair = random.choice(notpair)
+    global chathistory  # so I can define chat history in this function
+    global notapair  # pushes out notapair WHICH IS NOT  ==  notpair
+    notapair = random.choice(notpair) # notpair is a list of responses when it doesn't understand.
     reply = notapair  # default
-    if questionset != ():
+    if questionset != ():  # If there is a question asked
         questionreply = checkAnswer()
     for pair in pairs:  # goes through all keys in the pairs dictionary to find one that is preferred
         match = re.match(pair[0], response, re.I)  # re.I removes case sensitivity
-        if match != None:
+        if match != None:  # when there is a match checks for the correct response to check out userprofile appending.
             rawoutput = pair[1][0]
             subblock = re.match(r"~(.*)?~", rawoutput)
-            if subblock:
+            if subblock:  # subtopic conversation
                 keyword = subblock.group(1)
                 block(keyword)
-                return
+                return  # doesn't need to run anything else.
             else:
                 appendUsers = re.match(r".*?%(.*)?%.*", rawoutput)
-                if appendUsers:
+                if appendUsers:  # checks for %%s.
                     appendProfile(appendUsers.group(1), findgroup(match))
                 reply = editoutput(pair[1], match)
     if questionset != ():
-        print(questionreply)
-        chathistory += str(questionreply) +"\n"
+        print(questionreply)  # prints at a different point for ease.
+        chathistory += str(questionreply) + "\n"  # This is how things are added to chathistory - as a string.
     pause(reply)
     lognonresponses(reply)
 
-def checkAnswer():
-    question = questionset[0]  # TIS A TUPLE VALUE so is not linked and that is fine.
+
+def checkAnswer():  # function for checking the answer of a question that Zirca asks.
+    question = questionset[0]  # TIS A TUPLE VALUE so is not linked and that is fine. (immutable so it can be copied)
     answerchecks = questionset[1]  # "
-    answerreplychecks = questionset[2]
-    answerreplies = questionset[3]
+    answerreplychecks = questionset[2]  # "
+    answerreplies = questionset[3]  # "
 
-    answermatch = None
+    answermatch = None  # default
 
-    for answercheck in answerchecks:
+    for answercheck in answerchecks:  # goes through answer check patterns and compares with answer.
         answermatch = re.match(answercheck, response)
         if answermatch:
             answer = findgroup(answermatch)
             break
 
-    global questionlist
+    global questionlist  # has to convert to list so I can remove questionset from the questionlist.
     questionlist = list(questionlist)
     questionlist.remove(questionset)
     questionlist = tuple(questionlist)
 
-    answerreply = answerreplies[-1]
-    if answermatch:
+    answerreply = answerreplies[-1]  # default value
+
+    if answermatch:  # appends and prints a answer reply
         appendProfile(question, answer)
         for answerreplycheck in answerreplychecks:
             for answerreplycheckvalue in answerreplycheck:
@@ -342,13 +357,14 @@ def checkAnswer():
     else:
         return "uh huh."
 
-def checkRepeatStatement():
+
+def checkRepeatStatement():  # checks if there is a repeat answer.
     for pastresponse in allResponses:
         if response == pastresponse:
             print("Hang on, didn't you say that before????? Well, whatever.")
 
 
-def block(keyword):
+def block(keyword):  # a block topic. (eg books or haribos) I did this function after I did subtopic so it is better.
     global chathistory
 
     for subpair in subpairs:
@@ -375,8 +391,7 @@ def block(keyword):
             return
 
 
-
-def editoutput(output, match):
+def editoutput(output, match):  # changes capital functions in output string.
     # random output
     reply = random.choice(output)
 
@@ -390,7 +405,7 @@ def editoutput(output, match):
         # need to find a better way than this. More fluid. THis is a basic way. A work around.
         reply = reply.replace("<TOPIC>", str(topic))
 
-    if "<ZTHINK>" in reply:
+    if "<ZTHINK>" in reply:  # Thinking thing right there.
         if match.group(1) != None:
             ztopic = match.group(1)
             for knownTopic in ZircaTopicBank:
@@ -400,7 +415,7 @@ def editoutput(output, match):
                     otherViews = knownTopic[3]
                     agreeDisagree = knownTopic[4]
                     conclusion = knownTopic[5]
-                    zthink = "I believe that " + ztopic + " is a " + posNeg + " thing. It really is a " + description + ". I know that other people say that " + otherViews + ", " + agreeDisagree + ". " + conclusion
+                    zthink = "I believe that " + ztopic + " is a " + posNeg + " thing. <PAUSE> It really is a " + description + ". <PAUSE>I know that other people say that " + otherViews + ", " + agreeDisagree + ".<PAUSE>" + conclusion
                 else:
                     zthink = "Oh, I actually do not know much about that topic"
         else:
@@ -410,7 +425,9 @@ def editoutput(output, match):
 
     return reply
 
-def findgroup(match):
+
+def findgroup(match):  # this is a function I use a lot. When something is matched, itr ignores which group. This
+    # function gets the group output that I want.
     groupno = 1
     noError = True
     while noError:
@@ -423,28 +440,29 @@ def findgroup(match):
             noError = False
     return value
 
-def appendProfile(key, match):
+
+def appendProfile(key, match):  # This was longer, but I simplified it. I could just input it without function but it isn't top priority
     userProfile[key] = match
 
-def pause(reply):
-    global chathistory
 
+def pause(reply):  # separates into different print phrases
+    global chathistory
     pausePhrases = re.split(r"<PAUSE>", reply)
 
     for pausePhrase in pausePhrases:
-        #time.sleep(1)
+        time.sleep(0.5)
         print(pausePhrase)
         chathistory = chathistory + str(pausePhrase) + "\n"
 
 
-def lognonresponses(reply):
+def lognonresponses(reply):  # logs it into log non responses file.
     if reply == notapair:
         nonresponsefile.write(str(response) + "\n")
     if reply in ["I'm not supposed to answer that.", "Bah! I can't answer that!", "I'm not actually sure... how to answer that... "]:
         nonresponsefile.write(str(response) + "\n")
 
 
-def askaquestion():
+def askaquestion():  # Ask a question. Uses dictionary for random function.
     # questionlist is a TUPLE MATRIX for immutability
     global questionset
     global chathistory
@@ -467,9 +485,9 @@ print("What is your name? (please say quit to end chat)")
 chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
 userName = input("?: ")  # initial name
 chathistory = chathistory + str("?: "+userName) + "\n"
-userProfile["name"] = userName
+userProfile["name"] = userName  # appends to user profile
 print("Hi, " + userName)
-qornoq = random.randint(0,1)
+qornoq = random.randint(0,1)  # sometimes prints a question, sometimes not a question.
 if qornoq == 1:
     askaquestion()
 else:
@@ -484,11 +502,7 @@ while chatting == True:
     checkRepeatStatement()
     allResponses.append(response)
     reply()
-    qornoq = random.randint(0,1)
-    if qornoq == 1:
-        askaquestion()
-    else:
-        questionset = ()
+
 
     # ending the chat
     if response == "quit":
@@ -517,6 +531,12 @@ while chatting == True:
         print(userProfile)
         chatting = False
 
+    qornoq = random.randint(0, 1)
+    if qornoq == 1:
+        askaquestion()
+    else:
+        questionset = ()
+
 nonresponsefile.close()
 
 
@@ -526,7 +546,6 @@ nonresponsefile.close()
 #  TODO print out previous terms and responses and replies
 #  TODO get responses from answers to questions
 #  TODO throwing back a question. make that work.
-#  TODO ADD TONS more comments.
 
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvv me realising what a pain in the butt this is going to be vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 

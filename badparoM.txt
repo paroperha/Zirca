@@ -275,3 +275,18 @@ rating :1
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: paro
+Hi, paro
+paro: :)
+:)
+What don't you like?
+paro: quit
+I don't know much about that interest.
+It's a shame to see you go. I hope you come back soon!
+What's your favourite colour?
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :1
+thank you!
+
+
