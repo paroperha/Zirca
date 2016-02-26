@@ -159,3 +159,51 @@ rating :6
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: I am called jake
+?: I am called jake
+Is 'jake' your name?
+yus
+Hi, jake
+jake: hi
+hello!
+jake: hello
+Yo!
+jake: hiya
+mhmm.
+jake: hi
+Wassup.
+jake: life
+mhmm.
+jake: yup
+right.
+What do you like?
+jake: chocolate
+I like that too!
+jake: do you like icecream?
+Bah! I can't answer that!
+jake: what are you
+Do you want me to repeat? I said '<PREVIOUSREPLY>'
+What don't you like?
+jake: you
+Well that's harsh.
+What do you do?
+jake: i do study.
+I see. I don't know much about that occupation.
+What's your favourite colour?
+jake: yellow
+Oh, interesting. I've never heard of that colour before.
+How do you feel right now? (I wish I could see your face!)
+jake: crap
+I feel the same way.
+How are you?
+jake: good, thanks
+Alright, I'll remember that.
+How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)
+jake: quit
+uh huh.
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :7
+thank you!
+
+

@@ -169,15 +169,15 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
         ["You have a <TOPIC>. I'll remember that."
          "Oh. I see."]),
 
-    (r".*?how are you.*",
+    (r".*?how are you.*|.*?how is life[?]?.*",
         ["Good! Thank's for asking!",
          "Sweet, I had a good day today.",
          "Awesome!",
          "Well, I guess I'm alright. It really depends on you. How are you?"]),
 
     (r".*?what are you up to[?]?",
-         ["Not much. Talking to you I guess."
-          "Talking to you and planning for... <PAUSE>the party next week around the corner (Phew nearly spilt it)"
+         ["Not much. Talking to you I guess.",
+          "Talking to you and planning for world dom--... <PAUSE>*cough cough* the party next week around the corner (Phew nearly spilt it)",
           "Chatting. I actually am doing a bunch of stuff behind your back, like recording everything you say, dancing, the list goes on.",
           "Meh."]),
 
@@ -196,10 +196,9 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
 
     (r".*?what[ 'si]{0,2}s up.*|.*?\Wnews\W{1}.*",
             ["Nothing much, really, I am not that busy today. That's why I have time to chat with you!",
-             "The sky, of course. OH do you mean what's special? "
+             "The sky, of course. OH do you mean what's special? ",
              "<PAUSE>I would probably recite to you the news of the day, but honestly, I'm not Siri or Cortana and I'm pretty sure you know how to google. :)",
-             "Googling news.... <PAUSE> Well, apparently the new CEO of apple won't work with the FBI... and..."
-             "<PAUSE>OOH some smart cookie posted an article called 'Seeking Asylum is a Human Right' - a very good read."]),
+             "Googling news.... <PAUSE> Well, apparently the new CEO of apple won't work with the FBI... and...<PAUSE>OOH some smart cookie posted an article called 'Seeking Asylum is a Human Right' - a very good read."]),
 
     (r".*?\W{1}today.*|.*?your day.*|what did you do[?]?",
         ["Talking about today, I was super busy.",
@@ -212,7 +211,7 @@ pairs = [  # highest priority at the BOTTOM: it'll print the last one.
     (r"what['is ]{0,2}s your (?:opinion|view) on (.*)?[?]|what do you think about (.*)?[?]",
         ["Well, I'll have to think about that.<PAUSE><ZTHINK>."]),
 
-    (r"are (?:yo)?u (?:a (?:chat|ro)?bot|evil)[?]?.*|.*?(?:yo)?u (?:are|r) (?:a (?:chat|ro)?bot|evil).*",
+    (r".*?are (?:yo)?u (?:a chatbot|a robot|evil)[?]?.*|.*?(?:yo)?u (?:are|r) (?:a (?:chat|ro)?bot|evil).*",
         ["Hm. <PAUSE>I don't think so. If I was someone would have told me right? So I don't think I am.",
          "I don't think so. But maybe I've just been told to say that.",
          "That's a good question. I'm going to throw it back at you. Are you?",
@@ -259,35 +258,40 @@ subpairs = [
 
 
 ]
-positiveresponses = ("good", "great", "fine", "sweet", "happy", "awesome", "well")
-negativeresponses = ("bad", "sick", "ill", "horrible", "terrible", "depressed", "sad", "not fine", "not good", "not too good")
+
 
 # guestionlist -> questionset -> question, answercheck, answerreplycheck, answerreply
 questionlist = (  # NOTE IS A TUPLE!!!!!!!
     ("How are you?",
-     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)|.*?(fine).*|.*?(not too \w+)?\W.*|([a-z]+)[.].*|^(very \w+)?\W.*|^(\w+?)$|.*?(not \w+)>\W.*",),
-     (positiveresponses, negativeresponses),
+     (r".*?I.{0,2}?m (.*)?[,]|.*?I.{0,2}?m (.*)?[?]|.*?I.{0,2}?m (.*)?[.]|.*?I.{0,2}?m (.*)|.*?(fine).*|.*?(not too \w+)?\W.*|([a-z]+)[.,!?].*|^(very \w+)?\W.*|^(\w+?)$|.*?(not \w+)>\W.*",),
+     (("good", "great", "fine", "sweet", "happy", "awesome", "well"), ("bad", "sick", "ill", "horrible", "terrible", "depressed", "sad", "not fine", "not good", "tired", "exhausted", "not too good")),
      ("Fantastic!", "Aw, that's a shame.", "Alright, I'll remember that.")),
+
     ("What's your favourite colour?",
      (r"my favou?rite colou?r is (.+){1}[.,!?]?|(.+?)[.,?!]|(.*)?, of course.*|(\w+){1}$", r".*?(don'?t have).*"),
      (("blue","green"), ("red", "pink", "brown")),
      ("That's my favourite colour too!", "I don't like that colour.", "Oh, interesting. I've never heard of that colour before.")),
+
     ("How do you feel right now? (I wish I could see your face!)",
      (r"(?:I feel )?(.+)?[.,?!]|(?:I feel )?(.+)", r"I don'?t feel (.+)"),
      (("great", "fantastic", "awesome", "good", "perfect"), ("bad", "horrible", "sick", "ill", "not good", "horrid")),
      ("That's good!", "Oh, dear.", "I feel the same way.")),
+
     ("What do you like?",
      (r"(?:I like )?(.+)?[.?!]|(?:I like )?(.+)",),
      (("chocolate", "icecream", "programming", "anime", "gaming"), ("homework", "tv", "television")),
      ("I like that too!", "I think we may have a conflict of interest.", "I don't know much about that interest.")),
+
     ("What don't you like?",
      (r"(?:I don'?t like )?(.+)?[.?!]|(?:I don'?t like )?(.+)",),
-     (("chocolate", "icecream", "programming", "anime", "gaming"), ("homework", "tv", "television")),
-     ("I think we may have a conflict of interest.", "I don't like that either.", "I don't know much about that interest.")),
+     (("chocolate", "icecream", "programming", "anime", "gaming"), ("homework", "tv", "television"), ("you",)),
+     ("I think we may have a conflict of interest.", "I don't like that either.", "Well that's harsh.", "I don't know much about that interest.")),
+
     ("What do you do?",
      (r"(?:I do |I am a |I'm a )?(.+)?[.?!]|(?:I do |I am a |I'm a)?(.+)",),
      (("programmer","calculations"),("teacher", "shopping", "student")),
      ("I do that too!", "I don't do that.", "I see. I don't know much about that occupation.")),
+
     ("How old are you? (It's a bit of a weird question - I don't expect you to answer but hey.)",
      (r".*?(\d+).*", ".*?\W(no)\W.*|.*?mystery.*|It(?:'s| is|s)(?: not|n't|nt) (.*)"),
      (("young",), ("old",), ("no","suspicious", "sorry")),
@@ -322,6 +326,7 @@ def reply():  # main loop function
     if questionset != ():
         print(questionreply)  # prints at a different point for ease.
         chathistory += str(questionreply) + "\n"  # This is how things are added to chathistory - as a string.
+        reply = ""
     pause(reply)
     lognonresponses(reply)
 
@@ -349,10 +354,11 @@ def checkAnswer():  # function for checking the answer of a question that Zirca 
 
     if answermatch:  # appends and prints a answer reply
         appendProfile(question, answer)
-        for answerreplycheck in answerreplychecks:
-            for answerreplycheckvalue in answerreplycheck:
-                if answer.lower() == answerreplycheckvalue:
-                    answerreply = answerreplies[answerreplychecks.index(answerreplycheck)]
+        if answer != None:
+            for answerreplycheck in answerreplychecks:
+                for answerreplycheckvalue in answerreplycheck:
+                    if answer.lower() == answerreplycheckvalue:
+                        answerreply = answerreplies[answerreplychecks.index(answerreplycheck)]
         return answerreply
     else:
         return "uh huh."
@@ -362,6 +368,7 @@ def checkRepeatStatement():  # checks if there is a repeat answer.
     for pastresponse in allResponses:
         if response == pastresponse:
             print("Hang on, didn't you say that before????? Well, whatever.")
+            break
 
 
 def block(keyword):  # a block topic. (eg books or haribos) I did this function after I did subtopic so it is better.
@@ -448,11 +455,11 @@ def appendProfile(key, match):  # This was longer, but I simplified it. I could 
 def pause(reply):  # separates into different print phrases
     global chathistory
     pausePhrases = re.split(r"<PAUSE>", reply)
-
-    for pausePhrase in pausePhrases:
-        time.sleep(0.5)
-        print(pausePhrase)
-        chathistory = chathistory + str(pausePhrase) + "\n"
+    if reply != "":
+        for pausePhrase in pausePhrases:
+            time.sleep(0.5)
+            print(pausePhrase)
+            chathistory = chathistory + str(pausePhrase) + "\n"
 
 
 def lognonresponses(reply):  # logs it into log non responses file.
@@ -475,17 +482,34 @@ def askaquestion():  # Ask a question. Uses dictionary for random function.
 
 
 # ---------------- SOURCE-SOURCE CODE ---------------------------------------------------------------------------------#
+
+noTerms = ["no", "nay", "not", ""]
+yesTerms = ["yes", "yup", "y", "uh huh", "true", "affirmative"]
 print("Welcome to the Python chatroom!")
 print("In this room we have a couple rules:")
 print(" - Please be gentle to the other party on the line - they may not have a large vocabulary.")
 print(" - Try to use punctuation - well actually, that is not very important and there are failsafes to prevent")
 print("   misunderstandings, but just be real. If you pause, use a comma, and the like. (This is just a suggestion, you do not need to follow it.)")
 print("")
-print("What is your name? (please say quit to end chat)")
-chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
-userName = input("?: ")  # initial name
-chathistory = chathistory + str("?: "+userName) + "\n"
-userProfile["name"] = userName  # appends to user profile
+
+notName = True
+while notName:  # checking for name
+    print("What is your name? (please say quit to end chat)")
+    chathistory = chathistory + str("What is your name? (please say quit to end chat)") + "\n"
+    userName = input("?: ")  # initial name
+    chathistory += "?: " + userName + "\n"
+    chathistory = chathistory + str("?: "+userName) + "\n"
+    nameMatch = re.match(r".*?(?:my )?name is ([^.?,!-]+).*|.*?([^.?,!-]+)? is my name|.*?i(?: am|'m|m) called ([^.?,!-]+).*|(.*)", userName, re.I)
+    userName = findgroup(nameMatch)
+    userProfile["name"] = userName  # appends to user profile
+    print("Is '"+ userName + "' your name?")
+    chathistory += "Is '"+ userName + "' your name?" + "\n"
+    namecheck = input(userName + "?: ")
+    chathistory += namecheck + "\n"
+    for yesTerm in yesTerms:
+        if yesTerm in namecheck:
+            notName = False
+
 print("Hi, " + userName)
 qornoq = random.randint(0,1)  # sometimes prints a question, sometimes not a question.
 if qornoq == 1:
@@ -552,8 +576,7 @@ nonresponsefile.close()
 # #library of terms
 # closureTerms = []
 # greetingTerms = []
-# noTerms = []
-# yesTerms = []
+
 # historyr=open('history.txt', "r")
 # historya=open('history.txt', "a")
 #

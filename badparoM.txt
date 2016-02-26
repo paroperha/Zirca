@@ -290,3 +290,21 @@ rating :1
 thank you!
 
 
+What is your name? (please say quit to end chat)
+?: paro
+?: paro
+Is 'paro' your name?
+yes
+Hi, paro
+paro: hello
+hello!
+How do you feel right now? (I wish I could see your face!)
+paro: I am happy, I think
+I feel the same way.
+paro: quit
+have a good day!
+WAIT! Please rate this chat! pick a integer between 1(the worst) and 10(the best)!
+rating :5
+thank you!
+
+
